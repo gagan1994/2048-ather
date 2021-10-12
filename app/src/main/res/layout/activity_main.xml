@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+    <data>
+        <variable
+            name="viewModel"
+            type="com.ather.a2048.viewmodel.MainActivityViewModel" />
+    </data>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
@@ -18,20 +23,20 @@
                 android:id="@+id/scoreCard"
                 layout="@layout/top_cards"
                 app:cardTitle="@{@string/score_title}"
-                app:cardScore="@{@string/default_value}"
+                app:cardScore="@{viewModel.scoreValue}"
                 />
 
             <include
                 android:id="@+id/bestCard"
                 layout="@layout/top_cards"
                 app:cardTitle="@{@string/best_title}"
-                app:cardScore="@{@string/default_value}"
+                app:cardScore="@{viewModel.bestValue}"
                 />
 
             <include
                 layout="@layout/top_cards"
                 app:cardTitle="@{@string/swipe_title}"
-                app:cardScore="@{@string/default_value}"
+                app:cardScore="@{viewModel.swipeValue}"
                 />
 
         </LinearLayout>
@@ -69,8 +74,9 @@
             android:background="@color/white"
             android:padding="4dp"
             android:text="Reset"
+            android:onClick="onResetClicked"
             android:textSize="20sp"
-            android:visibility="gone" />
+            />
 
     </LinearLayout>
 
