@@ -2,6 +2,7 @@ package com.ather.a2048.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.ather.a2048.R
 import com.ather.a2048.databinding.ActivityMainBinding
@@ -12,6 +13,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+    }
+
+    fun onResetClicked(v: View) {
 
     }
 
