@@ -2,27 +2,35 @@ package com.ather.a2048.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import com.ather.a2048.databinding.BoxViewBinding
-import com.ather.a2048.model.Direction
-
+import android.os.Handler
+import android.os.Parcel
+import android.os.Parcelable
+import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
-import androidx.core.view.GestureDetectorCompat
 import android.view.View
+import android.widget.TextView
+import android.widget.Toast
+import androidx.core.app.NotificationCompatSideChannelService
+import androidx.core.view.GestureDetectorCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.ather.a2048.R
+import com.ather.a2048.Utils
 import com.ather.a2048.databinding.ActivityMainBinding
+import com.ather.a2048.databinding.BoxViewBinding
+import com.ather.a2048.model.Box
+import com.ather.a2048.model.Direction
+import com.ather.a2048.model.GameListeners
 import com.ather.a2048.viewmodel.MainActivityViewModel
 
-class MainActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
+class MainActivity() : AppCompatActivity(), GestureDetector.OnGestureListener, GameListeners {
 
 
     companion object {
+        val SIZE: Int = 4
         val SWIPE_MIN_DISTANCE = 120
         val SWIPE_THRESHOLD_VELOCITY = 200
-        val SIZE = 4
     }
 
     private lateinit var viewModel: MainActivityViewModel
@@ -40,8 +48,29 @@ class MainActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         binding.viewModel = viewModel;
         mGestureDetector = GestureDetectorCompat(this, this)
         initArray()
+        viewModel.gridData.observe(this, {
+            updateUi(it)
+        })
+        updateBtnText()
     }
 
+    private fun updateUi(grid: Array<Array<Box>>) {
+        for (i: Int in 0 until grid.size) {
+            for (j: Int in 0 until grid[i].size) {
+                if (grid[i][j].value == 0) {
+                    textViews[i][j]?.tvValue?.text = ""
+                } else {
+                    textViews[i][j]?.tvValue?.text = grid[i][j].value.toString()
+                }
+                setBoxColor(textViews[i][j], grid[i][j])
+            }
+        }
+    }
+
+    private fun setBoxColor(boxViewBinding: BoxViewBinding?, box: Box) {
+        var bgColor = Utils.getColor(box.value)
+        boxViewBinding?.boxBg?.setCardBackgroundColor(resources.getColor(bgColor))
+    }
 
     private fun initArray() {
         textViews[0][0] = binding.row0.box0
@@ -66,8 +95,28 @@ class MainActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
     }
 
 
+    override fun gameOver(score: Int) {
+        Toast.makeText(
+            this,
+            "Game Over! you have scored: " + score.toString() + "",
+            Toast.LENGTH_LONG
+        ).show()
+    }
+
+    override fun gameStarted() {
+        updateBtnText()
+    }
+
+    override fun cantMove(direction: Direction) {
+        binding.layoutMain.setBackgroundColor(resources.getColor(R.color.holo_red_dark))
+        Handler().postDelayed(Runnable {
+            binding.layoutMain.setBackgroundColor(resources.getColor(R.color.trans))
+        }, 100)
+    }
+
+
     fun onResetClicked(v: View) {
-        viewModel.reset()
+        viewModel.reset(this)
         updateBtnText()
     }
 
@@ -114,7 +163,10 @@ class MainActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
         return true
     }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.unbind()
+    }
 
     /*
     * Ignore below functions

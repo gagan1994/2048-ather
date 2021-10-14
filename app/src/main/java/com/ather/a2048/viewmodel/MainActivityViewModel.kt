@@ -2,16 +2,14 @@ package com.ather.a2048.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.ather.a2048.model.TopCards
 import androidx.lifecycle.MutableLiveData
-import com.ather.a2048.model.GameManager
+import com.ather.a2048.model.*
 import com.ather.a2048.view.MainActivity
-import com.ather.a2048.model.Direction
 
 class MainActivityViewModel : ViewModel() {
     val scoreValue = MutableLiveData<String>()
-    val gameManager = GameManager(MainActivity.SIZE)
-    var topCards = TopCards()
+    var gameManager = GameBrain(rowSize = MainActivity.SIZE, colSize = MainActivity.SIZE)
+    var gridData = MutableLiveData<Array<Array<Box>>>()
 
 
     fun swipe(direction: Direction) {
@@ -39,16 +37,18 @@ class MainActivityViewModel : ViewModel() {
     }
 
     fun checkGameStarted(): Boolean {
-        // TODO: 13/10/21 Check if game started
-        return false;
+        return gameManager.gameObjectsVal != null
     }
 
     private fun updateUi() {
-        // TODO: 13/10/21 Update UI score and high score
+        scoreValue.postValue(gameManager.scoreString)
+        gridData.postValue(gameManager.gameObjectsVal)
+        gameManager.updateState()
     }
 
-    fun reset() {
-        // TODO: 13/10/21 Reset Vals
+    fun reset(listeners: GameListeners) {
+        gameManager.initGameObjects()
+        gameManager.listener = listeners
         updateUi()
     }
 
