@@ -51,6 +51,7 @@ class MainActivity() : AppCompatActivity(), GestureDetector.OnGestureListener, G
         viewModel.gridData.observe(this, {
             updateUi(it)
         })
+        viewModel.updateHighScore()
         updateBtnText()
     }
 

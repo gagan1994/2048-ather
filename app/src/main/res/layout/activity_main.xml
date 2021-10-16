@@ -27,7 +27,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
             android:layout_weight="1"
-            app:cardHighScore="@{viewModel.scoreValue}"
+            app:cardHighScore="@{viewModel.highScore}"
             app:cardScore="@{viewModel.scoreValue}" />
 
         <RelativeLayout

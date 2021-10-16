@@ -3,11 +3,13 @@ package com.ather.a2048.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
+import com.ather.a2048.SharedPrefUtils
 import com.ather.a2048.model.*
 import com.ather.a2048.view.MainActivity
 
 class MainActivityViewModel : ViewModel() {
     val scoreValue = MutableLiveData<String>()
+    val highScore = MutableLiveData<String>()
     var gameManager = GameBrain(rowSize = MainActivity.SIZE, colSize = MainActivity.SIZE)
     var gridData = MutableLiveData<Array<Array<Box>>>()
 
@@ -43,6 +45,8 @@ class MainActivityViewModel : ViewModel() {
     private fun updateUi() {
         scoreValue.postValue(gameManager.scoreString)
         gridData.postValue(gameManager.gameObjectsVal)
+        highScore.postValue(SharedPrefUtils.getInstance()
+            .updateHighScore(gameManager.score).toString())
         gameManager.updateState()
     }
 
@@ -50,6 +54,10 @@ class MainActivityViewModel : ViewModel() {
         gameManager.initGameObjects()
         gameManager.listener = listeners
         updateUi()
+    }
+
+    fun updateHighScore() {
+        highScore.postValue(SharedPrefUtils.getInstance().getHighScore().toString())
     }
 
 }
