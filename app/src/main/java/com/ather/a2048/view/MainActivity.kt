@@ -23,11 +23,15 @@ import com.ather.a2048.model.Box
 import com.ather.a2048.model.Direction
 import com.ather.a2048.model.GameListeners
 import com.ather.a2048.viewmodel.MainActivityViewModel
+import android.content.DialogInterface
+import androidx.appcompat.app.AlertDialog
 
-class MainActivity() : AppCompatActivity(), GestureDetector.OnGestureListener, GameListeners {
+
+class MainActivity() : AppCompatActivity(), GameListeners {
 
 
     companion object {
+        val TARGET_SCORE = 16
         val SIZE: Int = 4
         val SWIPE_MIN_DISTANCE = 120
         val SWIPE_THRESHOLD_VELOCITY = 200
@@ -35,7 +39,6 @@ class MainActivity() : AppCompatActivity(), GestureDetector.OnGestureListener, G
 
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var binding: ActivityMainBinding
-    private lateinit var mGestureDetector: GestureDetectorCompat
     private var textViews: Array<Array<BoxViewBinding?>> =
         Array<Array<BoxViewBinding?>>(SIZE) { arrayOfNulls<BoxViewBinding>(SIZE) }
 
@@ -46,12 +49,19 @@ class MainActivity() : AppCompatActivity(), GestureDetector.OnGestureListener, G
         viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel;
-        mGestureDetector = GestureDetectorCompat(this, this)
         initArray()
         viewModel.gridData.observe(this, {
             updateUi(it)
         })
         viewModel.updateHighScore()
+        viewModel.isReachedTarget.postValue(false)
+        viewModel.isReachedTarget.observe(this, {
+            binding.scoreCard.targetReachedTv.text =if (it)  "Target " + TARGET_SCORE.toString() + " Reached" else
+                "Target to be reached "+ TARGET_SCORE.toString()
+            binding.scoreCard.targetReachedLayout.backgroundTintList =
+                resources.getColorStateList(if (it) R.color.success_green else R.color.primaryColor);
+
+        })
         updateBtnText()
     }
 
@@ -97,11 +107,16 @@ class MainActivity() : AppCompatActivity(), GestureDetector.OnGestureListener, G
 
 
     override fun gameOver(score: Int) {
-        Toast.makeText(
-            this,
-            "Game Over! you have scored: " + score.toString() + "",
-            Toast.LENGTH_LONG
-        ).show()
+        AlertDialog.Builder(this)
+            .setTitle("Game Over!")
+            .setMessage("Game Over! you have scored: " + score.toString() + "") // Specifying a listener allows you to take an action before dismissing the dialog.
+            // The dialog is automatically dismissed when a dialog button is clicked.
+            .setPositiveButton("Ok",
+                DialogInterface.OnClickListener { dialog, which ->
+                    dialog.dismiss()
+                }) // A null listener allows the button to dismiss the dialog and take no further action.
+            .show()
+
     }
 
     override fun gameStarted() {
@@ -127,74 +142,31 @@ class MainActivity() : AppCompatActivity(), GestureDetector.OnGestureListener, G
         }
     }
 
-
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        mGestureDetector.onTouchEvent(event)
-        return super.onTouchEvent(event)
-    }
-
-
-    override fun onFling(
-        e1: MotionEvent?,
-        e2: MotionEvent?,
-        velocityX: Float,
-        velocityY: Float
-    ): Boolean {
+    fun swipe(v: View) {
         if (!viewModel.checkGameStarted()) {
             Toast.makeText(this, "Start Game First", Toast.LENGTH_LONG).show()
-            return true
+            return
         }
-        if (e1!!.x - e2!!.x > SWIPE_MIN_DISTANCE
-            && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY
-        ) {
-            viewModel.swipe(Direction.LEFT)
-        } else if (e2.x - e1.x > SWIPE_MIN_DISTANCE
-            && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY
-        ) {
-            viewModel.swipe(Direction.RIGHT)
-        } else if (e1.y - e2.y > SWIPE_MIN_DISTANCE
-            && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY
-        ) {
-            viewModel.swipe(Direction.UP)
-        } else if (e2.y - e1.y > SWIPE_MIN_DISTANCE
-            && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY
-        ) {
-            viewModel.swipe(Direction.DOWN)
+        when (v.id) {
+            R.id.leftBtn -> {
+                viewModel.swipe(Direction.LEFT)
+            }
+            R.id.rightBtn -> {
+                viewModel.swipe(Direction.RIGHT)
+            }
+            R.id.upBtn -> {
+                viewModel.swipe(Direction.UP)
+            }
+            R.id.downBtn -> {
+                viewModel.swipe(Direction.DOWN)
+            }
         }
-        return true
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
         binding.unbind()
-    }
-
-    /*
-    * Ignore below functions
-    * */
-
-    override fun onDown(e: MotionEvent?): Boolean {
-        return false
-
-    }
-
-    override fun onShowPress(e: MotionEvent?) {
-    }
-
-    override fun onSingleTapUp(e: MotionEvent?): Boolean {
-        return false
-    }
-
-    override fun onScroll(
-        e1: MotionEvent?,
-        e2: MotionEvent?,
-        distanceX: Float,
-        distanceY: Float
-    ): Boolean {
-        return false
-    }
-
-    override fun onLongPress(e: MotionEvent?) {
     }
 
 }

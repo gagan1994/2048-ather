@@ -8,6 +8,7 @@ import com.ather.a2048.model.*
 import com.ather.a2048.view.MainActivity
 
 class MainActivityViewModel : ViewModel() {
+    val isReachedTarget = MutableLiveData<Boolean>()
     val scoreValue = MutableLiveData<String>()
     val highScore = MutableLiveData<String>()
     var gameManager = GameBrain(rowSize = MainActivity.SIZE, colSize = MainActivity.SIZE)
@@ -48,6 +49,7 @@ class MainActivityViewModel : ViewModel() {
         highScore.postValue(SharedPrefUtils.getInstance()
             .updateHighScore(gameManager.score).toString())
         gameManager.updateState()
+        isReachedTarget.postValue(gameManager.score >= MainActivity.TARGET_SCORE)
     }
 
     fun reset(listeners: GameListeners) {
