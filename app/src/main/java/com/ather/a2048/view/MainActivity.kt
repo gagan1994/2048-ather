@@ -24,7 +24,7 @@ import com.ather.a2048.model.Direction
 import com.ather.a2048.model.GameListeners
 import com.ather.a2048.viewmodel.MainActivityViewModel
 
-class MainActivity() : AppCompatActivity(), GestureDetector.OnGestureListener, GameListeners {
+class MainActivity() : AppCompatActivity(), GameListeners {
 
 
     companion object {
@@ -35,7 +35,6 @@ class MainActivity() : AppCompatActivity(), GestureDetector.OnGestureListener, G
 
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var binding: ActivityMainBinding
-    private lateinit var mGestureDetector: GestureDetectorCompat
     private var textViews: Array<Array<BoxViewBinding?>> =
         Array<Array<BoxViewBinding?>>(SIZE) { arrayOfNulls<BoxViewBinding>(SIZE) }
 
@@ -46,7 +45,6 @@ class MainActivity() : AppCompatActivity(), GestureDetector.OnGestureListener, G
         viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel;
-        mGestureDetector = GestureDetectorCompat(this, this)
         initArray()
         viewModel.gridData.observe(this, {
             updateUi(it)
@@ -127,74 +125,31 @@ class MainActivity() : AppCompatActivity(), GestureDetector.OnGestureListener, G
         }
     }
 
-
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        mGestureDetector.onTouchEvent(event)
-        return super.onTouchEvent(event)
-    }
-
-
-    override fun onFling(
-        e1: MotionEvent?,
-        e2: MotionEvent?,
-        velocityX: Float,
-        velocityY: Float
-    ): Boolean {
+    fun swipe(v:View){
         if (!viewModel.checkGameStarted()) {
             Toast.makeText(this, "Start Game First", Toast.LENGTH_LONG).show()
-            return true
+            return
         }
-        if (e1!!.x - e2!!.x > SWIPE_MIN_DISTANCE
-            && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY
-        ) {
-            viewModel.swipe(Direction.LEFT)
-        } else if (e2.x - e1.x > SWIPE_MIN_DISTANCE
-            && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY
-        ) {
-            viewModel.swipe(Direction.RIGHT)
-        } else if (e1.y - e2.y > SWIPE_MIN_DISTANCE
-            && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY
-        ) {
-            viewModel.swipe(Direction.UP)
-        } else if (e2.y - e1.y > SWIPE_MIN_DISTANCE
-            && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY
-        ) {
-            viewModel.swipe(Direction.DOWN)
+        when(v.id){
+            R.id.leftBtn ->{
+                viewModel.swipe(Direction.LEFT)
+            }
+            R.id.rightBtn ->{
+                viewModel.swipe(Direction.RIGHT)
+            }
+            R.id.upBtn ->{
+                viewModel.swipe(Direction.UP)
+            }
+            R.id.downBtn ->{
+                viewModel.swipe(Direction.DOWN)
+            }
         }
-        return true
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
         binding.unbind()
-    }
-
-    /*
-    * Ignore below functions
-    * */
-
-    override fun onDown(e: MotionEvent?): Boolean {
-        return false
-
-    }
-
-    override fun onShowPress(e: MotionEvent?) {
-    }
-
-    override fun onSingleTapUp(e: MotionEvent?): Boolean {
-        return false
-    }
-
-    override fun onScroll(
-        e1: MotionEvent?,
-        e2: MotionEvent?,
-        distanceX: Float,
-        distanceY: Float
-    ): Boolean {
-        return false
-    }
-
-    override fun onLongPress(e: MotionEvent?) {
     }
 
 }
