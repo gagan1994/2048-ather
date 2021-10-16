@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:padding="2dp"
+        android:layout_gravity="center"
+        >
+      <androidx.cardview.widget.CardView
+          android:layout_width="match_parent"
+          android:id="@+id/boxBg"
+          app:cardBackgroundColor="@color/box_color"
+          android:elevation="8dp"
+          android:layout_height="match_parent">
+          <TextView
+              android:layout_marginTop="20dp"
+              android:layout_marginBottom="20dp"
+              android:id="@+id/tv_value"
+              android:fontFamily="@font/number_2"
+              android:textStyle="bold"
+              android:textSize="20sp"
+              android:textColor="@color/white"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              />
+      </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</layout>

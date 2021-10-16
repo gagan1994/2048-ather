@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">2048-ather</string>
+    <string name="score_title">Score</string>
+    <string name="high_score_title">High Score</string>
+    <string name="best_title">Best</string>
+    <string name="swipe_title">Swipes</string>
+    <string name="default_value">0</string>
+</resources>

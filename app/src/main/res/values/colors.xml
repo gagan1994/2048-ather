@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="primaryColor">#344955</color>
+    <color name="colorSecondary">#232f34</color>
+
+
+    <color name="colorPrimaryVariant">#232f34</color>
+    <color name="colorOnPrimary">#f9aa33</color>
+    <color name="colorSecondaryVariant">#344955</color>
+    <color name="colorOnSecondary">#232f34</color>
+
+
+
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#585858</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+
+    <color name="box_color">#CCCCCC</color>
+
+    <color name="box_color_2">#BABABA</color>
+    <color name="box_color_4">#BABABA</color>
+    <color name="box_color_8">#BABABA</color>
+
+    <color name="box_color_16">#9a9a9a</color>
+    <color name="box_color_32">#9a9a9a</color>
+
+    <color name="box_color_64">#6e6e6e</color>
+    <color name="box_color_128">#6e6e6e</color>
+
+    <color name="box_color_256">#585858</color>
+    <color name="box_color_512">#585858</color>
+    <color name="box_color_1024">#585858</color>
+
+
+    <color name="box_color_2048">#356935</color>
+    <color name="box_color_super">#3c3a32</color>
+
+
+    <color name="holo_red_dark">#ffcc0000</color>
+    <color name="semiTransparent">#3FFFFFFF</color>
+    <color name="semiTransparentColored">#3FE3F2FD</color>
+    <color name="trans">@android:color/transparent</color>
+
+    <color name="success_green" >#4BB543</color>
+
+
+</resources>

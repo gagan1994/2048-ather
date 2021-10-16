@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_large">10dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <!-- For the grid -->
+    <dimen name="box_width">60dp</dimen>
+    <dimen name="box_height">60dp</dimen>
+    <dimen name="box_padding">4dp</dimen>
+
+</resources>

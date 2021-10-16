@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:weightSum="4"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/box0"
+            layout="@layout/box_view"
+            />
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/box1"
+            layout="@layout/box_view"
+            />
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/box2"
+            layout="@layout/box_view"/>
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/box3"
+            layout="@layout/box_view"/>
+
+    </LinearLayout>
+</layout>
