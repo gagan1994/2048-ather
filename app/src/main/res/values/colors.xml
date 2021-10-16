@@ -47,5 +47,7 @@
     <color name="semiTransparentColored">#3FE3F2FD</color>
     <color name="trans">@android:color/transparent</color>
 
+    <color name="success_green" >#4BB543</color>
+
 
 </resources>

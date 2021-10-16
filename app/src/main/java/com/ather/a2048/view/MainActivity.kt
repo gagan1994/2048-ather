@@ -23,11 +23,15 @@ import com.ather.a2048.model.Box
 import com.ather.a2048.model.Direction
 import com.ather.a2048.model.GameListeners
 import com.ather.a2048.viewmodel.MainActivityViewModel
+import android.content.DialogInterface
+import androidx.appcompat.app.AlertDialog
+
 
 class MainActivity() : AppCompatActivity(), GameListeners {
 
 
     companion object {
+        val TARGET_SCORE = 16
         val SIZE: Int = 4
         val SWIPE_MIN_DISTANCE = 120
         val SWIPE_THRESHOLD_VELOCITY = 200
@@ -50,6 +54,14 @@ class MainActivity() : AppCompatActivity(), GameListeners {
             updateUi(it)
         })
         viewModel.updateHighScore()
+        viewModel.isReachedTarget.postValue(false)
+        viewModel.isReachedTarget.observe(this, {
+            binding.scoreCard.targetReachedTv.text =if (it)  "Target " + TARGET_SCORE.toString() + " Reached" else
+                "Target to be reached "+ TARGET_SCORE.toString()
+            binding.scoreCard.targetReachedLayout.backgroundTintList =
+                resources.getColorStateList(if (it) R.color.success_green else R.color.primaryColor);
+
+        })
         updateBtnText()
     }
 
@@ -95,11 +107,16 @@ class MainActivity() : AppCompatActivity(), GameListeners {
 
 
     override fun gameOver(score: Int) {
-        Toast.makeText(
-            this,
-            "Game Over! you have scored: " + score.toString() + "",
-            Toast.LENGTH_LONG
-        ).show()
+        AlertDialog.Builder(this)
+            .setTitle("Game Over!")
+            .setMessage("Game Over! you have scored: " + score.toString() + "") // Specifying a listener allows you to take an action before dismissing the dialog.
+            // The dialog is automatically dismissed when a dialog button is clicked.
+            .setPositiveButton("Ok",
+                DialogInterface.OnClickListener { dialog, which ->
+                    dialog.dismiss()
+                }) // A null listener allows the button to dismiss the dialog and take no further action.
+            .show()
+
     }
 
     override fun gameStarted() {
@@ -125,22 +142,22 @@ class MainActivity() : AppCompatActivity(), GameListeners {
         }
     }
 
-    fun swipe(v:View){
+    fun swipe(v: View) {
         if (!viewModel.checkGameStarted()) {
             Toast.makeText(this, "Start Game First", Toast.LENGTH_LONG).show()
             return
         }
-        when(v.id){
-            R.id.leftBtn ->{
+        when (v.id) {
+            R.id.leftBtn -> {
                 viewModel.swipe(Direction.LEFT)
             }
-            R.id.rightBtn ->{
+            R.id.rightBtn -> {
                 viewModel.swipe(Direction.RIGHT)
             }
-            R.id.upBtn ->{
+            R.id.upBtn -> {
                 viewModel.swipe(Direction.UP)
             }
-            R.id.downBtn ->{
+            R.id.downBtn -> {
                 viewModel.swipe(Direction.DOWN)
             }
         }
