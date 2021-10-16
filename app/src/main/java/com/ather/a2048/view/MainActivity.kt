@@ -31,7 +31,7 @@ class MainActivity() : AppCompatActivity(), GameListeners {
 
 
     companion object {
-        val TARGET_SCORE = 16
+        val TARGET_SCORE = 2048
         val SIZE: Int = 4
         val SWIPE_MIN_DISTANCE = 120
         val SWIPE_THRESHOLD_VELOCITY = 200
